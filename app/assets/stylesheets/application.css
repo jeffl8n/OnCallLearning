@@ -1,0 +1,80 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, vendor/assets/stylesheets,
+ * or vendor/assets/stylesheets of plugins, if any, can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the top of the
+ * compiled file, but it's generally better to create a new file per style scope.
+ *
+ *= require_self
+ *= require bootstrap_and_overrides
+ *= require s3_direct_upload_progress_bars
+ *= require_tree .
+ */
+a.btn:visited { color: #000;}
+a.btn-success:visited { color: #fff;}
+a.btn-info:visited { color: #fff;}
+a.btn-primary:visited { color: #fff;}
+a.btn-danger:visited {color: #fff;}
+
+body {
+    position: relative;
+    padding-top: 60px;
+}
+
+footer {
+	text-align: center;
+    padding-top: 25px;
+}
+
+.box {
+    margin: 10px 0;
+    padding: 0px 10px 14px;
+    *padding-top: 0px;
+    border: 3px solid #0088CC;
+}
+
+.navbar{
+    font-size: 18px;
+    font-weight: 200;
+
+}
+
+.navbar .brand{
+    font-size: 22px;
+    font-weight: 200;
+}
+
+.center{
+    text-align: center;
+}
+
+footbar {
+    padding-top: 40px;
+    text-align: center;
+    margin-top: 40px;
+}
+
+.notifications {
+    position: fixed;
+}
+
+.notifications.top-center {
+    top: 65px;
+    width: 100%;
+    left: 0;
+}
+
+.notifications > div {
+    position: relative;
+    z-index: 9999;
+    margin: 5px 0;
+}
+
+.notifications.top-center > div {
+    margin: 5px auto;
+    width: 20%;
+    text-align: center;
+}

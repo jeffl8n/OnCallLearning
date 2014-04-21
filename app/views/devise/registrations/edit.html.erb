@@ -1,0 +1,107 @@
+<% content_for :title, "Profile" %>
+
+<h2>My Profile</h2>
+
+<div class="well">
+	<ul class="nav nav-tabs">
+		<li id="homeTab" class="active">
+			<a href="#home" data-toggle="tab">Profile</a>
+		</li>
+		<li id="passwordTab" >
+			<a href="#password" data-toggle="tab">Password</a>
+		</li>
+	</ul>
+	<div id="myTabContent" class="tab-content">
+		<div class="tab-pane active in" id="home">
+			<%=  simple_form_for(resource, :as => resource_name, :url => registration_path(resource_name), :html => { :method => :put,:class => 'form-vertical', :id => "tab" }) do |f| %>
+			<%= devise_error_messages! %>
+
+			<div>
+				<%= f.label :first_name %>
+				<%= f.text_field :first_name, :class => "input-xlarge", :required => true%>
+			</div>
+
+			<div>
+				<%= f.label :last_name %>
+				<%= f.text_field :last_name, :class => "input-xlarge", :required => true%>
+			</div>
+
+			<div>
+				<%= f.label :email %>
+				<%= f.email_field :email, :class => "input-xlarge", :validate => true %>
+			</div>
+
+			<% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
+			<div>
+				Currently waiting confirmation for: <%= resource.unconfirmed_email %>
+			</div>
+			<% end %>
+
+			<% if current_user.try(:admin?) %>
+			<br />
+			<div id="adminSection">
+				<div>
+					<%= f.label :admin %>
+					<%= f.check_box :admin %>
+				</div>
+				<div>
+					<%= f.label :active %>
+					<%= f.check_box :active %>
+				</div>
+				<div>
+					<%= f.input :deleted_at, :as => 'string', :label => 'Deleted Date', input_html: {class: 'datepicker'} %>
+				</div>
+			</div>
+			<br />
+			<%end%>
+			<div>
+				<%= f.submit "Update",:class => "btn btn-primary" %>
+			</div>
+			<% end %>
+		</div>
+		<div class="tab-pane fade" id="password">
+			<%=  simple_form_for(resource, :as => resource_name, :url => registration_path(resource_name), :html => { :method => :put,:class => 'form-vertical', :id => "tab2" }) do |f| %>
+			<%= devise_error_messages! %>
+			<div>
+				<%= f.label :password %>
+				<br />
+				<%= f.password_field :password, :autocomplete => "off", :class => "input-xlarge" %>
+			</div>
+
+			<div>
+				<%= f.label :password_confirmation %>
+				<%= f.password_field :password_confirmation, :autocomplete => "off", :class => "input-xlarge" %>
+			</div>
+
+			<div>
+				<%= f.label :current_password %> <i>(we need your current password to confirm your changes)</i>
+				<br />
+				<%= f.password_field :current_password, :autocomplete => "off", :class => "input-xlarge" %>
+			</div>
+			<div>
+				<div>
+					<%= f.button :submit, "Update", :class => "btn btn-primary" %>
+				</div>
+			</div>
+			<% end %>
+		</div>
+	</div>
+</div>
+
+<% content_for :scripts do %>
+<%= javascript_include_tag "jquery.payment" %>
+<script>
+	$(function() {
+		var h = window.location.hash;
+
+		if (h.indexOf('home') > -1) {
+			// Home tab is active on load.
+		} else if (h.indexOf('password') > -1) {
+			$("#homeTab").removeClass("active");
+			$("#home").removeClass("active").removeClass("in").addClass("fade");
+			$("#password").removeClass("fade").addClass("active").addClass("in");
+			$("#passwordTab").addClass("active");
+		}
+	});
+</script>
+<% end %>

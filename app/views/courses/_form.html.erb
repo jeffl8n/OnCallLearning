@@ -1,0 +1,159 @@
+<%= s3_uploader_form callback_url: courses_url,
+id: "s3_uploader",
+acl: "private",
+callback_param: "direct_upload_url",
+max_file_size: 100.megabytes do %>
+<%= file_field_tag :file, multiple: false %>
+<% end %>
+<br/>
+
+<div id="uploads_container"></div>
+<script id="template-upload" type="text/x-tmpl">
+	<div id="upload_{%=o.unique_id%}" class="upload">
+	<h5>{%=o.name%}</h5>
+	<div class="progress progress-striped active"><div class="bar" style="width: 0%"></div></div>
+	</div>
+</script>
+<br/>
+
+<%= form_for(@course_revision) do |f| %>
+
+<% if @course_revision.errors.any? %>
+<div class="row-fluid">
+	<div id="error_explanation" class="span6 offset3">
+		<ul>
+			<% @course_revision.errors.full_messages.each do |msg| %>
+			<li>
+				<%= msg %>
+			</li>
+			<% end %>
+		</ul>
+	</div>
+</div>
+<% end %>
+
+<div class="row-fluid">
+	<div class="box span6 offset3">
+		<div class="field">
+			<%= f.label :title %>
+			<%= f.text_field :title, :class => "span6", :required => true%>
+		</div>
+		<div class="field">
+			<%= f.label :link %>
+			<span class="help-block">This is the file that launches your course. By default, we get it from your SCORM manifest. (You probably don't need to change this if it is already filled in.)</span>
+			<%= f.text_field :link, :class => "span6", :required => true %>
+
+		</div>
+
+		<div class="field">
+			<label class="checkbox"> <%= check_box_tag "share_comments",1 , @this_review_cycle.share_comments %>
+				Allow Reviewers to see each others comments. <a href="#" class="text-info" rel="popover" data-trigger="hover" data-placement="right" data-html=true data-title="Share Comments:" data-content="Reviewers will be able to see all comments made by any other Reviewer."><i class="icon-info-sign"></i></a> </label>
+		</div>
+		<div class="field">
+			<label class="checkbox"> <%= check_box_tag "screenr_enabled", 1, @this_review_cycle.screenr %>
+				Enable Screenr. <a href="#" class="text-info" rel="popover" data-trigger="hover" data-placement="right" data-html=true data-title="Enable Screenr:" data-content="Some networks may block Screenr. Or perhaps you just don't want to use it. Either way; you can uncheck this box to turn it off."><i class="icon-info-sign"></i></a> </label>
+		</div>
+		<div class="field">
+			<label class="checkbox"> <%= f.check_box :private %>
+				Require log in. <a href="#" class="text-info" rel="popover" data-trigger="hover" data-placement="right" data-html=true data-title=" Require log in:" data-content="If not required Reviewers will be able to submit comments without logging in.<br>Each Reviewer will get a unique link. <br>WARNING: Reviewers could share their link."><i class="icon-info-sign"></i></a> </label>
+		</div>
+		<%else%>
+		<div class="field ">
+			<p>
+				<i class="icon-envelope"></i> Enter <strong>Developer</strong> email addresses separated by commas. <a href="#" class="text-info" rel="popover" data-trigger="hover" data-placement="right" data-html=true data-title="Developers:" data-content="Developers can see and edit all comments."><i class="icon-info-sign"></i></a>
+				<%= text_area_tag "developers_list", "", rows: "3", class: "input-xxlarge span12" %>
+				<label class="checkbox"> <%= check_box_tag "email_devs_cb" %>Send email to Developers </label>
+				<span id="dev_msg" style="display:  none"> <i class="icon-comment"></i> Add message for <strong>Developers</strong>. <a href="#" class="text-info" rel="popover" data-trigger="hover" data-placement="right" data-html=true data-title="Developers' Message:" data-content="Add a custom message to the email sent to Developers."><i class="icon-info-sign"></i></a> <%= text_area_tag "developers_msg", "", rows: "3", class: "input-xxlarge span12", maxlength: 250 %> </span>
+			</p>
+		</div>
+		<div class="field">
+			<p>
+				<i class="icon-envelope"></i> Enter <strong>Reviewer</strong> email addresses separated by commas. <a href="#" class="text-info" rel="popover" data-trigger="hover" data-placement="right" data-html=true data-title="Reviewers:" data-content="Reviewers will each recieve links to review the course.<br>Unless you check the box below; Reviewers can see and edit only their own comments."><i class="icon-info-sign"></i></a>
+				<%= text_area_tag "reviewers_list", "", rows: "3", class: "input-xxlarge span12" %>
+				<label class="checkbox"> <%= check_box_tag "email_revs_cb" %>Send email to Reviewers </label>
+				<span id="rev_msg" style="display:  none"> <i class="icon-comment"></i> Add message for <strong>Reviewers</strong>. <a href="#" class="text-info" rel="popover" data-trigger="hover" data-placement="right" data-html=true data-title="Reviewers' Message:" data-content="Add a custom message to the email sent to Reveiewers."><i class="icon-info-sign"></i></a> <%= text_area_tag "reviewers_msg", "", rows: "3", class: "input-xxlarge span12", maxlength: 250 %> </span>
+			</p>
+		</div>
+		<div class="field">
+			<label class="checkbox"> <%= check_box_tag "share_comments" %>
+				Allow Reviewers to see each others comments. <a href="#" class="text-info" rel="popover" data-trigger="hover" data-placement="right" data-html=true data-title="Share Comments:" data-content="Reviewers will be able to see all comments made by any other Reviewer."><i class="icon-info-sign"></i></a> </label>
+		</div>
+		<div class="field">
+			<label class="checkbox"> <%= check_box_tag "screenr_enabled", 1, true %>
+				Enable Screenr. <a href="#" class="text-info" rel="popover" data-trigger="hover" data-placement="right" data-html=true data-title="Enable Screenr:" data-content="Some networks may block Screenr. Or perhaps you just don't want to use it. Either way; you can uncheck this box to turn it off."><i class="icon-info-sign"></i></a> </label>
+		</div>
+		<div class="field">
+			<label class="checkbox"> <%= f.check_box :private %>
+				Require log in. <a href="#" class="text-info" rel="popover" data-trigger="hover" data-placement="right" data-html=true data-title=" Require log in:" data-content="If not required Reviewers will be able to submit comments without logging in.<br>Each Reviewer will get a unique link. <br>WARNING: Reviewers could share their link."><i class="icon-info-sign"></i></a> </label>
+		</div>
+		<% end %>
+		<% if !@this_review_cycle.nil? %>
+		<div class="field">
+			<label class="string optional control-label" for="expire_date">Review expires on:</label>
+			<input type="text" id="expire_date" name="expire_date" value="<%= !@course.new_record? && !@this_review_cycle.expire.nil? ? @this_review_cycle.expire.to_formatted_s(:long) : ''  %>">
+		</div>
+		<% end %>
+		<div class="actions">
+			<%= f.submit :class=>'btn btn-success btn-large', :id => 'submitBtn' %>
+		</div>
+
+	</div>
+</div>
+<% end %>
+
+</div>
+</div>
+<% content_for :scripts do %>
+<script type="text/javascript">
+	$(document).ready(function () {
+		
+		<% if @course.new_record? %>
+			$('#submitBtn').attr("disabled", "disabled");
+		
+			$('#submitBtn').on('click', function() {
+				if (checkFile()) {
+					$('#submitBtn').attr("disabled", "disabled");
+					$('#new_course').submit();
+				}
+			}); 
+		<% end %>
+		
+		$('#courseZipFile').change(function() {
+			if (checkFile()) {
+				$('#submitBtn').removeAttr("disabled");
+			}
+		});
+	
+		$("#email_devs_cb").change(function() {
+			$("#dev_msg").toggle();
+		});
+	
+		$("#email_revs_cb").change(function() {
+			$("#rev_msg").toggle();
+		});
+	
+		$('textarea[maxlength]').on('keyup blur', function() {
+			// Store the maxlength and value of the field.
+			var maxlength = $(this).attr('maxlength');
+			var val = $(this).val();
+	
+			// Trim the field if it has content over the maxlength.
+			if (val.length > maxlength) {
+				$(this).val(val.slice(0, maxlength));
+			}
+		});
+	});
+
+	function checkFile() {
+		extension = '.zip';
+		filename = $('#courseZipFile').val();
+		if (!(filename.indexOf(extension, filename.length - extension.length) !== -1)) {
+			alert('Course must be uploaded in a .zip file format.')
+			$('#courseZipFile').val('');
+			return false;
+		}
+		return true;
+	}
+
+</script>
+<% end %>

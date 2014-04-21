@@ -1,0 +1,140 @@
+<%
+ owns_courses = @courses.size > 0
+  develops_courses = @courses_as_developer.size > 0
+  reviews_courses = @reviews_i_need_to_complete.size > 0
+  has_assigned_comments = @assigned_comments.size > 0
+%>
+
+<div class="row-fluid">
+	<div id="owner-div" class="span8 offset2 box">
+		<%  if owns_courses %>
+		<table class="table table-hover">
+			<thead>
+				<tr>
+					<th colspan="2">Courses You Own </th><th></th>
+				</tr>
+			</thead>
+			<tbody>
+				<% @courses.each do |course| %>
+				<tr>
+					<td><%= course.title %>
+					<%
+					number_of_recent_comments = how_many_recent_comments(course)
+					if number_of_recent_comments > 0
+					%> <span class="badge badge-info"><%= number_of_recent_comments.to_s %></span> <%end%> </td>
+					<td> <% if course.active? %>
+					<%= link_to ' Details', course, :class => "btn btn-small icon-list-alt pull-right " %>
+					<%else%>
+					<button class="btn btn-small icon-list-alt pull-right disabled" >
+						Details
+					</button> <%end%> </td>
+					<% end %>
+				<tr>
+					<td colspan="2"> <%= link_to " Upload a Course ", 'courses/new', :class => "btn icon-upload" %> </td>
+				</tr>
+			</tbody>
+		</table>
+		<% else %>
+		<p style="padding-top:25px" class="center">
+			If you would like to upload a course for others to review, <a href="/courses/new">click here</a>
+		</p>
+		<%end%>
+	</div>
+</div>
+<%  if develops_courses %>
+<div id="developer-div" class="row-fluid">
+	<div class="span8 offset2 box">
+		<table class="table table-hover">
+			<thead>
+				<tr>
+					<th colspan="2">Courses You Develop </th><th></th>
+				</tr>
+			</thead>
+			<tbody>
+				<% @courses_as_developer.each do |developer| %>
+				<% if developer.course.deleted_date.nil? %>
+				<tr>
+					<td><%= developer.course.title %>
+					<%
+					number_of_recent_comments = how_many_recent_comments(developer.course)
+					if number_of_recent_comments > 0
+					%> <span class="badge badge-info"><%= number_of_recent_comments.to_s %></span> <%end%> </td>
+					<td ><%= link_to ' Details', developer.course, :class => "btn btn-small icon-list-alt pull-right " %> </td>
+				</tr>
+				<% end %>
+				<% end %>
+			</tbody>
+		</table>
+	</div>
+</div>
+<% end %>
+<% if reviews_courses %>
+<div id="reviewer-div" class="row-fluid">
+	<div class="span8 offset2 box">
+		<table class="table table-hover">
+			<thead>
+				<tr>
+					<th colspan="2">Courses to Review </th><th></th>
+				</tr>
+			</thead>
+			<tbody>
+				<% @reviews_i_need_to_complete .each do |review| %>
+				<% if !review.review_cycle.nil? && !review.review_cycle.course.nil? %>
+				<% if review.review_cycle.cycle_num == review.review_cycle.course.review_cycles.order(:created_at).last.cycle_num %>
+				<% if review.review_cycle.course.deleted_date.nil? %>
+				<tr>
+					<td><%= review.review_cycle.course.title %> </td>
+					<td >
+					<div class="btn-group pull-right ">
+						<%= link_to ' Details', review.review_cycle.course, :class => "btn btn-small icon-list-alt " %>
+						<%
+ locked = false
+              if !review.lock.nil?
+              locked = true
+              elsif !review.review_cycle.expire.nil? && review.review_cycle.expire <= DateTime.now
+              locked = true
+              end
+
+%>
+						<%if !locked%>
+						<%= link_to " Review Now", '/review/'+review.secret_key , :target => "_blank", :class => "btn btn-small icon-play" %>
+						<%end%>
+					</div></td>
+				</tr>
+				<% end %>
+				<% end %>
+				<% end %>
+				<% end %>
+			</tbody>
+		</table>
+	</div>
+</div>
+<% end %>
+
+<% if owns_courses or develops_courses or reviews_courses %>
+<div class="sidebar-nav">
+	<div class="box">
+		<ul class="nav nav-list">
+			<li class="nav-header">
+				My Role:
+			</li>
+			<% if owns_courses %>
+			<li>
+				<a class="menu-item" href="#owner-div"><i class="icon-upload"></i> Owner</a>
+			</li>
+			<% end %>
+			<% if develops_courses %>
+			<li>
+				<a class="menu-item" href="#developer-div"><i class="icon-edit"></i> Developer </a>
+			</li>
+			<% end %>
+			<% if reviews_courses %>
+			<li>
+				<a class="menu-item" href="#reviewer-div"><i class="icon-comment"></i> Reviewer </a>
+			</li>
+			<% end %>
+
+		</ul>
+	</div>
+</div>
+<% end %>
