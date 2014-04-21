@@ -52,7 +52,6 @@ db/*.sqlite3
 
 # Ignore all logfiles and tempfiles.
 tmp/*
-Gemfile.lock
 public/assets/*
 vendor/**
 .env
