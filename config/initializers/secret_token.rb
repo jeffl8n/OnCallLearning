@@ -9,4 +9,4 @@
 
 # Make sure your secret_key_base is kept private
 # if you're sharing your code publicly.
-OnCallLearning::Application.config.secret_key_base = '89faa8b9c388d4c413be02107aff9b410ca51f79f6e7a0ca9628ca3954e429bd9908ab4625672bfdc9bc1124723b7d0fed14a66378765a0f664db8d1d85b1a99'
+OnCallLearning::Application.config.secret_key_base = 'defb321a9289ba1114a7cac03a1447c878b95e860db2fbb6464bbf6d8d99c2adfd683ef1cf77c243ca9f4f306e9a0901756ae42d5cb19616e27911056785d9e7'
