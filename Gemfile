@@ -37,6 +37,7 @@ gem 'stripe', '~> 1.11.0'
 gem 'stripe_event', '~> 1.1.0'
 
 # Use SCSS for stylesheets
+gem 'sass', '~> 3.2.19'
 gem 'sass-rails', '~> 4.0.3'
 
 # Use Less CSS for stylesheets
@@ -58,15 +59,8 @@ gem 'twitter-bootstrap-rails', '~> 2.2.8'
 # Quiet Assets
 gem 'quiet_assets', '~> 1.0.2'
 
-# Stylesheet
-gem 'sass', '~> 3.2.19'
-gem 'sass-rails', '~> 4.0.3'
-
 # Use modernizr for more backward compatibility
 gem 'modernizr-rails', '~> 2.7.1'
-
-# Quiet Assets
-gem 'quiet_assets', '~> 1.0.2'
 
 # Transloadit
 gem 'transloadit-rails', '~> 1.1.1'
