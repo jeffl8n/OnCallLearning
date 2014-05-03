@@ -28,15 +28,10 @@ ActiveRecord::Schema.define(version: 20140307020132) do
 
   create_table "course_revisions", force: true do |t|
     t.integer  "course_id"
-    t.integer  "course_revision_num",        default: 1
-    t.boolean  "share_comments",             default: false
+    t.integer  "course_revision_num", default: 1
+    t.boolean  "share_comments",      default: false
     t.datetime "expire_dt"
-    t.string   "direct_upload_url",                          null: false
-    t.string   "course_upload_file_name"
-    t.string   "course_upload_content_type"
-    t.integer  "course_upload_file_size"
-    t.datetime "course_upload_updated_at"
-    t.boolean  "processed",                  default: false, null: false
+    t.boolean  "processed",           default: false, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -56,10 +51,6 @@ ActiveRecord::Schema.define(version: 20140307020132) do
   create_table "organizations", force: true do |t|
     t.string   "name"
     t.integer  "owner_id"
-    t.string   "uploaded_logo_file_name"
-    t.string   "uploaded_logo_content_type"
-    t.integer  "uploaded_logo_file_size"
-    t.datetime "uploaded_logo_updated_at"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

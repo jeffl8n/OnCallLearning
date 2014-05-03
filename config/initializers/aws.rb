@@ -1,4 +1,4 @@
-# Rails.configuration.aws is used by AWS, Paperclip, and S3DirectUpload
-Rails.configuration.aws = YAML.load(ERB.new(File.read("#{Rails.root}/config/aws.yml")).result)[Rails.env].symbolize_keys!
-AWS.config(logger: Rails.logger)
-AWS.config(Rails.configuration.aws)
+AWS::S3::Base.establish_connection!(
+    :access_key_id     => 'AKIAIS5ICO5JTWTFSPBA',
+    :secret_access_key => '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'
+  )

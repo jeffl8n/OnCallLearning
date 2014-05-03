@@ -10,7 +10,6 @@
  *
  *= require_self
  *= require bootstrap_and_overrides
- *= require s3_direct_upload_progress_bars
  *= require_tree .
  */
 a.btn:visited { color: #000;}

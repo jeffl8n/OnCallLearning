@@ -3,7 +3,6 @@ class CreateOrganizations < ActiveRecord::Migration
     create_table :organizations do |t|
       t.string :name
       t.integer :owner_id
-      t.attachment :uploaded_logo
       t.timestamps
     end
   end
